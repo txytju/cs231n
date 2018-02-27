@@ -186,7 +186,24 @@ class FullyConnectedNet(object):
         # beta2, etc. Scale parameters should be initialized to one and shift      #
         # parameters should be initialized to zero.                                #
         ############################################################################
-        pass
+
+        #version 2
+        dims = [input_dim] + hidden_dims + [num_classes]
+        for i in range(self.num_layers):
+            self.params['b%d' % (i+1)] = np.zeros(dims[i + 1])
+            self.params['W%d' % (i+1)] = np.random.randn(dims[i], dims[i + 1]) * weight_scale
+
+        # version 1
+        # layer_input_dim = input_dim
+        # for i, hd in enumerate(hidden_dims):
+        #     self.params['W%d'%(i+1)] = weight_scale * np.random.randn(layer_input_dim, hd)
+        #     self.params['b%d'%(i+1)] = weight_scale * np.zeros(hd)
+        #     # if self.use_batchnorm:
+        #     #     self.params['gamma%d'%(i+1)] = np.ones(hd)
+        #     #     self.params['beta%d'%(i+1)] = np.zeros(hd)
+        #     layer_input_dim = hd
+        # self.params['W%d'%(self.num_layers)] = weight_scale * np.random.randn(layer_input_dim, num_classes)
+        # self.params['b%d'%(self.num_layers)] = weight_scale * np.zeros(num_classes)
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
@@ -244,7 +261,15 @@ class FullyConnectedNet(object):
         # self.bn_params[1] to the forward pass for the second batch normalization #
         # layer, etc.                                                              #
         ############################################################################
-        pass
+        layer_input = X
+        ar_cache = {}
+        dp_cache = {}
+
+        for layer in range(self.num_layers-1):
+            layer_input, ar_cache[layer] = affine_relu_forward(layer_input, self.params['W%d'%(layer+1)], self.params['b%d'%(layer+1)])
+
+        ar_out, ar_cache[self.num_layers] = affine_forward(layer_input, self.params['W%d'%(num_layers)], self.params['b%d'%(num_layers)])
+        score = ar_out
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
@@ -267,7 +292,28 @@ class FullyConnectedNet(object):
         # automated tests, make sure that your L2 regularization includes a factor #
         # of 0.5 to simplify the expression for the gradient.                      #
         ############################################################################
-        pass
+        loss, dscores = softmax_loss(scores, y)
+        dhout = dscores
+        loss = loss + 0.5 * self.reg * np.sum(self.params['W%d'%(self.num_layers)] * self.params['W%d'%(self.num_layers)])  # 能放在一个循环的都放在下边循环里
+        dx , dw , db = affine_backward(dhout , ar_cache[self.num_layers])
+        grads['W%d'%(self.num_layers)] = dw + self.reg * self.params['W%d'%(self.num_layers)]
+        grads['b%d'%(self.num_layers)] = db
+        dhout = dx
+        for idx in range(self.num_layers-1):
+            lay = self.num_layers - 1 - idx - 1
+            loss = loss + 0.5 * self.reg * np.sum(self.params['W%d'%(lay+1)] * self.params['W%d'%(lay+1)])
+            # if self.use_dropout:
+            #     dhout = dropout_backward(dhout ,dp_cache[lay])
+            # if self.use_batchnorm:
+            #     dx, dw, db, dgamma, dbeta = affine_bn_relu_backward(dhout, ar_cache[lay])
+            # else:
+            dx, dw, db = affine_relu_backward(dhout, ar_cache[lay])
+            grads['W%d'%(lay+1)] = dw + self.reg * self.params['W%d'%(lay+1)]
+            grads['b%d'%(lay+1)] = db
+            # if self.use_batchnorm:
+            #     grads['gamma%d'%(lay+1)] = dgamma
+            #     grads['beta%d'%(lay+1)] = dbeta
+            dhout = dx
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
