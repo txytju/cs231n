@@ -1,6 +1,6 @@
 from __future__ import print_function, division
-from future import standard_library
-standard_library.install_aliases()
+# from future import standard_library
+# standard_library.install_aliases()
 from builtins import range
 from builtins import object
 import os
@@ -140,6 +140,9 @@ class Solver(object):
 
         # Make sure the update rule exists, then replace the string
         # name with the actual function
+        # hasattr(object, name) The arguments are an object and a string. 
+        # The result is True if the string is the name of one of the 
+        # object’s attributes, False if not.
         if not hasattr(optim, self.update_rule):
             raise ValueError('Invalid update_rule "%s"' % self.update_rule)
         self.update_rule = getattr(optim, self.update_rule)
@@ -186,7 +189,7 @@ class Solver(object):
         for p, w in self.model.params.items():
             dw = grads[p]
             config = self.optim_configs[p]
-            next_w, next_config = self.update_rule(w, dw, config)
+            next_w, next_config = self.update_rule(w, dw, config)  # where optimization rule works
             self.model.params[p] = next_w
             self.optim_configs[p] = next_config
 
@@ -248,7 +251,8 @@ class Solver(object):
             end = (i + 1) * batch_size
             scores = self.model.loss(X[start:end])
             y_pred.append(np.argmax(scores, axis=1))
-        y_pred = np.hstack(y_pred)
+        y_pred = np.hstack(y_pred) # This is equivalent to concatenation along the second axis.
+                                   # xcept for 1-D arrays where it concatenates along the first axis.
         acc = np.mean(y_pred == y)
 
         return acc
@@ -258,8 +262,8 @@ class Solver(object):
         """
         Run optimization to train the model.
         """
-        num_train = self.X_train.shape[0]
-        iterations_per_epoch = max(num_train // self.batch_size, 1)
+        num_train = self.X_train.shape[0] 
+        iterations_per_epoch = max(num_train // self.batch_size, 1)  
         num_iterations = self.num_epochs * iterations_per_epoch
 
         for t in range(num_iterations):

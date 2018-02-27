@@ -50,21 +50,28 @@ def affine_backward(dout, cache):
     - db: Gradient with respect to b, of shape (M,)
     """
     x, w, b = cache
-    xx = np.reshape(x, (x.shape[0], -1))
-    N = dout.shape[0]
-    dw = 0
-    dx = np.zeros_like(x)
+    dx, dw, db = None, None, None
     ###########################################################################
     # TODO: Implement the affine backward pass.                               #
     ###########################################################################
-    for i in range(N):
-        dout_row = dout[i, :].reshape(1, -1)
-        x_column = xx[i, :].reshape(-1, 1)
-        dw += np.dot(x_column, dout_row)
+    N = dout.shape[0]
+    x_rsp = x.reshape(N, -1)
 
-    for i in range(N):
-        dout_column = dout[i, :].reshape(-1, 1)
-        dx[i,:,:] = np.dot(w, dout_column).reshape(x.shape[1],x.shape[2])
+    # 向量式写法
+    dw = x_rsp.T.dot(dout)
+    dx = dout.dot(w.T)
+    dx = dx.reshape(*x.shape)
+
+
+    # 非向量式写法
+    # for i in range(N):
+    #     dout_row = dout[i, :].reshape(1, -1)
+    #     x_column = x_rsp[i, :].reshape(-1, 1)
+    #     dw += np.dot(x_column, dout_row)
+    # dx 的非向量式计算方法有误
+    # for i in range(N):
+    #     dout_column = dout[i, :].reshape(-1, 1)
+    #     dx[i,:,:] = np.dot(w, dout_column).reshape(x.shape[1],x.shape[2])
 
     db = np.sum(dout, axis=0)
     ###########################################################################
@@ -111,7 +118,8 @@ def relu_backward(dout, cache):
     ###########################################################################
     # TODO: Implement the ReLU backward pass.                                 #
     ###########################################################################
-    dx = (x >= 0) * dout
+    dx = dout
+    dx[x < 0] = 0
         
     # mask = np.zeros_like(x)
     # mask[x >= 0] = 1
