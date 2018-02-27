@@ -268,7 +268,7 @@ class FullyConnectedNet(object):
         for layer in range(self.num_layers-1):
             layer_input, ar_cache[layer] = affine_relu_forward(layer_input, self.params['W%d'%(layer+1)], self.params['b%d'%(layer+1)])
 
-        ar_out, ar_cache[self.num_layers] = affine_forward(layer_input, self.params['W%d'%(self.num_layers)], self.params['b%d'%(num_layers)])
+        ar_out, ar_cache[self.num_layers] = affine_forward(layer_input, self.params['W%d'%(self.num_layers)], self.params['b%d'%(self.num_layers)])
         score = ar_out
         ############################################################################
         #                             END OF YOUR CODE                             #
