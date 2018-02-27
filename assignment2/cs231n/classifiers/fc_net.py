@@ -265,7 +265,7 @@ class FullyConnectedNet(object):
         ar_cache = {}
         dp_cache = {}
         
-        for lay in xrange(self.num_layers-1):
+        for lay in range(self.num_layers-1):
             if self.use_batchnorm:
                 layer_input, ar_cache[lay] = affine_bn_relu_forward(layer_input, 
                                             self.params['W%d'%(lay+1)], self.params['b%d'%(lay+1)], 
@@ -307,7 +307,7 @@ class FullyConnectedNet(object):
         grads['W%d'%(self.num_layers)] = dw + self.reg * self.params['W%d'%(self.num_layers)]
         grads['b%d'%(self.num_layers)] = db
         dhout = dx
-        for idx in xrange(self.num_layers-1):
+        for idx in range(self.num_layers-1):
             lay = self.num_layers - 1 - idx - 1
             loss = loss + 0.5 * self.reg * np.sum(self.params['W%d'%(lay+1)] * self.params['W%d'%(lay+1)])
             if self.use_dropout:
