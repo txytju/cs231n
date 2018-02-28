@@ -139,7 +139,7 @@ def adam(x, dx, config=None):
     # stored in config.                                                       #
     ###########################################################################
     config['m'] = config['beta1'] * config['m'] + (1 - config['beta1']) * dx
-    config['v'] = config['beta2'] * config['v'] + (1 - config[beta2]) * dx * dx
+    config['v'] = config['beta2'] * config['v'] + (1 - config['beta2']) * dx * dx
     mb = config['m'] / (1 - config['beta1'] ** config['t'])
     vb = config['v'] / (1 - config['beta2'] ** config['t'])
     next_x -= config['learning_rate'] * mb / (np.sqrt(vb) + config['epsilon'])
