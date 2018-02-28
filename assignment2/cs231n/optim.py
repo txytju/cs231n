@@ -101,7 +101,10 @@ def rmsprop(x, dx, config=None):
     # config['cache'].                                                        #
     ###########################################################################
     config['cache'] = config['decay_rate'] * config['cache'] + (1 - config['decay_rate']) * dx * dx
-    next_x -= config['learning_rate'] * dx / (np.sqrt(config['cache']) + config['epsilon'])
+    if next_x is None:
+        next_x = config['learning_rate'] * dx / (np.sqrt(config['cache']) + config['epsilon'])
+    else:
+        next_x -= config['learning_rate'] * dx / (np.sqrt(config['cache']) + config['epsilon'])
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
