@@ -592,7 +592,6 @@ def max_pool_backward_naive(dout, cache):
     _, _, H_out, W_out = dout.shape
 
     dx = np.zeros_like(x)
-    print(dx.shape)
 
     for k in range(N):
         for m in range(C):
@@ -604,8 +603,7 @@ def max_pool_backward_naive(dout, cache):
                     index_H += i * stride
                     index_W += j * stride
                     index = [k, m, index_H, index_W]
-                    print(index)
-                    dx[index] += 1 * d
+                    dx[k, m, index_H, index_W] += 1 * d
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
