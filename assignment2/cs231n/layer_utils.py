@@ -44,16 +44,16 @@ def conv_relu_forward(x, w, b, conv_param):
     - cache: Object to give to the backward pass
     """
     # Fast Version
-    # a, conv_cache = conv_forward_fast(x, w, b, conv_param)
-    # out, relu_cache = relu_forward(a)
-    # cache = (conv_cache, relu_cache)
-    # return out, cache
-
-    # Native Version 
-    a, conv_cache = conv_forward_naive(x, w, b, conv_param)
+    a, conv_cache = conv_forward_fast(x, w, b, conv_param)
     out, relu_cache = relu_forward(a)
     cache = (conv_cache, relu_cache)
-    return out, cache   
+    return out, cache
+
+    # Native Version 
+    # a, conv_cache = conv_forward_naive(x, w, b, conv_param)
+    # out, relu_cache = relu_forward(a)
+    # cache = (conv_cache, relu_cache)
+    # return out, cache   
 
 
 def conv_relu_backward(dout, cache):
@@ -61,49 +61,49 @@ def conv_relu_backward(dout, cache):
     Backward pass for the conv-relu convenience layer.
     """
     # Fast Version
-    # conv_cache, relu_cache = cache
-    # da = relu_backward(dout, relu_cache)
-    # dx, dw, db = conv_backward_fast(da, conv_cache)
-    # return dx, dw, db
-
-    # Native Version
     conv_cache, relu_cache = cache
     da = relu_backward(dout, relu_cache)
-    dx, dw, db = conv_backward_naive(da, conv_cache)
+    dx, dw, db = conv_backward_fast(da, conv_cache)
     return dx, dw, db
+
+    # Native Version
+    # conv_cache, relu_cache = cache
+    # da = relu_backward(dout, relu_cache)
+    # dx, dw, db = conv_backward_naive(da, conv_cache)
+    # return dx, dw, db
 
 
 
 def conv_bn_relu_forward(x, w, b, gamma, beta, conv_param, bn_param):
     # Fast Version
-    # a, conv_cache = conv_forward_fast(x, w, b, conv_param)
-    # an, bn_cache = spatial_batchnorm_forward(a, gamma, beta, bn_param)
-    # out, relu_cache = relu_forward(an)
-    # cache = (conv_cache, bn_cache, relu_cache)
-    # return out, cache
-
-    # Naive Version
-    a, conv_cache = conv_forward_naive(x, w, b, conv_param)
+    a, conv_cache = conv_forward_fast(x, w, b, conv_param)
     an, bn_cache = spatial_batchnorm_forward(a, gamma, beta, bn_param)
     out, relu_cache = relu_forward(an)
     cache = (conv_cache, bn_cache, relu_cache)
     return out, cache
 
+    # Naive Version
+    # a, conv_cache = conv_forward_naive(x, w, b, conv_param)
+    # an, bn_cache = spatial_batchnorm_forward(a, gamma, beta, bn_param)
+    # out, relu_cache = relu_forward(an)
+    # cache = (conv_cache, bn_cache, relu_cache)
+    # return out, cache
+
 
 def conv_bn_relu_backward(dout, cache):
     # Fast Version
-    # conv_cache, bn_cache, relu_cache = cache
-    # dan = relu_backward(dout, relu_cache)
-    # da, dgamma, dbeta = spatial_batchnorm_backward(dan, bn_cache)
-    # dx, dw, db = conv_backward_fast(da, conv_cache)
-    # return dx, dw, db, dgamma, dbeta
-
-    # Naive Version
     conv_cache, bn_cache, relu_cache = cache
     dan = relu_backward(dout, relu_cache)
     da, dgamma, dbeta = spatial_batchnorm_backward(dan, bn_cache)
-    dx, dw, db = conv_backward_naive(da, conv_cache)
+    dx, dw, db = conv_backward_fast(da, conv_cache)
     return dx, dw, db, dgamma, dbeta
+
+    # Naive Version
+    # conv_cache, bn_cache, relu_cache = cache
+    # dan = relu_backward(dout, relu_cache)
+    # da, dgamma, dbeta = spatial_batchnorm_backward(dan, bn_cache)
+    # dx, dw, db = conv_backward_naive(da, conv_cache)
+    # return dx, dw, db, dgamma, dbeta
 
 def conv_relu_pool_forward(x, w, b, conv_param, pool_param):
     """
@@ -119,18 +119,18 @@ def conv_relu_pool_forward(x, w, b, conv_param, pool_param):
     - cache: Object to give to the backward pass
     """
     # Fast Version
-    # a, conv_cache = conv_forward_fast(x, w, b, conv_param)
-    # s, relu_cache = relu_forward(a)
-    # out, pool_cache = max_pool_forward_fast(s, pool_param)
-    # cache = (conv_cache, relu_cache, pool_cache)
-    # return out, cache
-
-    # Naive Version
-    a, conv_cache = conv_forward_naive(x, w, b, conv_param)
+    a, conv_cache = conv_forward_fast(x, w, b, conv_param)
     s, relu_cache = relu_forward(a)
     out, pool_cache = max_pool_forward_fast(s, pool_param)
     cache = (conv_cache, relu_cache, pool_cache)
     return out, cache
+
+    # Naive Version
+    # a, conv_cache = conv_forward_naive(x, w, b, conv_param)
+    # s, relu_cache = relu_forward(a)
+    # out, pool_cache = max_pool_forward_fast(s, pool_param)
+    # cache = (conv_cache, relu_cache, pool_cache)
+    # return out, cache
 
 
 
@@ -139,15 +139,15 @@ def conv_relu_pool_backward(dout, cache):
     Backward pass for the conv-relu-pool convenience layer
     """
     # Fast Version
-    # conv_cache, relu_cache, pool_cache = cache
-    # ds = max_pool_backward_fast(dout, pool_cache)
-    # da = relu_backward(ds, relu_cache)
-    # dx, dw, db = conv_backward_fast(da, conv_cache)
-    # return dx, dw, db
-
-    # Naive Version
     conv_cache, relu_cache, pool_cache = cache
     ds = max_pool_backward_fast(dout, pool_cache)
     da = relu_backward(ds, relu_cache)
-    dx, dw, db = conv_backward_naive(da, conv_cache)
+    dx, dw, db = conv_backward_fast(da, conv_cache)
     return dx, dw, db
+
+    # Naive Version
+    # conv_cache, relu_cache, pool_cache = cache
+    # ds = max_pool_backward_fast(dout, pool_cache)
+    # da = relu_backward(ds, relu_cache)
+    # dx, dw, db = conv_backward_naive(da, conv_cache)
+    # return dx, dw, db
