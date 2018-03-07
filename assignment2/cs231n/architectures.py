@@ -2,6 +2,8 @@
 # Input image size is [32, 32, 3]
 
 # [conv-relu-pool]x3 -> [affine]x2 -> [softmax]
+import tensorflow as tf
+
 def my_model_1(X,y,is_training):
     
     # conv-relu-pool 1
