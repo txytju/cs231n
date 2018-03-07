@@ -38,7 +38,7 @@ def my_model_1(X,y,is_training):
     return a12
 
 
-
+# [conv-relu-pool]x4 -> [affine]x2 -> [softmax]
 def my_model_2(X,y,is_training):
     
     # conv-relu-pool 1
@@ -53,6 +53,7 @@ def my_model_2(X,y,is_training):
     # conv-relu-pool 4
     Wconv4 = tf.get_variable("Wconv4", shape=[3, 3, 128, 256])
     bconv4 = tf.get_variable("bconv4", shape=[256])
+
     
     a1 = tf.nn.conv2d(X, Wconv1, [1,1,1,1], padding="SAME") + bconv1
     a1 = tf.nn.relu(a1)
@@ -66,10 +67,14 @@ def my_model_2(X,y,is_training):
     a5 = tf.nn.relu(a5)
     a6 = tf.nn.max_pool(a5, [1,2,2,1], [1,2,2,1], padding="SAME")
     
+    a7 = tf.nn.conv2d(a6, Wconv3, [1,1,1,1], padding="SAME") + bconv3
+    a7 = tf.nn.relu(a7)
+    a8 = tf.nn.max_pool(a7, [1,2,2,1], [1,2,2,1], padding="SAME")
+
        
-    a6_reshape = tf.reshape(a6, [-1,1024])
-    a10 = tf.layers.dense(a6_reshape, 500, activation=tf.nn.relu)
-    a11 = tf.layers.dense(a10, 100, activation=tf.nn.relu)
-    a12 = tf.layers.dense(a11, 10)
+    a8_reshape = tf.reshape(a8, [-1,1024])
+    a9 = tf.layers.dense(a8_reshape, 500, activation=tf.nn.relu)
+    a10 = tf.layers.dense(a9, 100, activation=tf.nn.relu)
+    a11 = tf.layers.dense(a10, 10)
     
-    return a12
+    return a11
