@@ -112,7 +112,7 @@ def my_model_3(X,y,is_training):
     
     a4 = tf.nn.conv2d(a3, Wconv3, [1,1,1,1], padding="SAME") + bconv3
     a4 = tf.nn.relu(a4)
-    a6 = tf.nn.conv2d(a5, Wconv4, [1,1,1,1], padding="SAME") + bconv4
+    a6 = tf.nn.conv2d(a4, Wconv4, [1,1,1,1], padding="SAME") + bconv4
     a6 = tf.nn.relu(a6)
     a7 = tf.nn.max_pool(a6, [1,2,2,1], [1,2,2,1], padding="SAME")
    
