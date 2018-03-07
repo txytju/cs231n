@@ -106,30 +106,30 @@ def my_model_3(X,y,is_training):
     
     a1 = tf.nn.conv2d(X, Wconv1, [1,1,1,1], padding="SAME") + bconv1
     a1 = tf.nn.relu(a1)
-    a1 = tf.nn.conv2d(X, Wconv2, [1,1,1,1], padding="SAME") + bconv2
-    a1 = tf.nn.relu(a1)
-    a2 = tf.nn.max_pool(a1, [1,2,2,1], [1,2,2,1], padding="SAME")
+    a2 = tf.nn.conv2d(a1, Wconv2, [1,1,1,1], padding="SAME") + bconv2
+    a2 = tf.nn.relu(a2)
+    a3 = tf.nn.max_pool(a2, [1,2,2,1], [1,2,2,1], padding="SAME")
     
-    a3 = tf.nn.conv2d(a2, Wconv3, [1,1,1,1], padding="SAME") + bconv3
-    a3 = tf.nn.relu(a3)
-    a3 = tf.nn.conv2d(a2, Wconv4, [1,1,1,1], padding="SAME") + bconv4
-    a3 = tf.nn.relu(a3)
-    a4 = tf.nn.max_pool(a3, [1,2,2,1], [1,2,2,1], padding="SAME")
+    a4 = tf.nn.conv2d(a3, Wconv3, [1,1,1,1], padding="SAME") + bconv3
+    a4 = tf.nn.relu(a4)
+    a6 = tf.nn.conv2d(a5, Wconv4, [1,1,1,1], padding="SAME") + bconv4
+    a6 = tf.nn.relu(a6)
+    a7 = tf.nn.max_pool(a6, [1,2,2,1], [1,2,2,1], padding="SAME")
    
-    a5 = tf.nn.conv2d(a4, Wconv5, [1,1,1,1], padding="SAME") + bconv5
-    a5 = tf.nn.relu(a5)
-    a5 = tf.nn.conv2d(a5, Wconv6, [1,1,1,1], padding="SAME") + bconv6
-    a5 = tf.nn.relu(a5)
-    a6 = tf.nn.max_pool(a5, [1,2,2,1], [1,2,2,1], padding="SAME")
+    a8 = tf.nn.conv2d(a7, Wconv5, [1,1,1,1], padding="SAME") + bconv5
+    a8 = tf.nn.relu(a8)
+    a9 = tf.nn.conv2d(a8, Wconv6, [1,1,1,1], padding="SAME") + bconv6
+    a9 = tf.nn.relu(a9)
+    a10 = tf.nn.max_pool(a9, [1,2,2,1], [1,2,2,1], padding="SAME")
     
 
        
-    a6_reshape = tf.reshape(a6, [-1,8192])
-    a7 = tf.layers.dense(a6_reshape, 1000, activation=tf.nn.relu)
-    a8 = tf.layers.dense(a7, 100, activation=tf.nn.relu)
-    a9 = tf.layers.dense(a8, 10)
+    a10_reshape = tf.reshape(a10, [-1,8192])
+    a11 = tf.layers.dense(a10_reshape, 1000, activation=tf.nn.relu)
+    a12 = tf.layers.dense(a11, 100, activation=tf.nn.relu)
+    a13 = tf.layers.dense(a12, 10)
     
-    return a9
+    return a13
 
 
 
