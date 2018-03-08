@@ -362,11 +362,13 @@ def dropout_forward(x, dropout_param):
         # TODO: Implement training phase forward pass for inverted dropout.   #
         # Store the dropout mask in the mask variable.                        #
         #######################################################################
-        # Drop prob is "p" so keep prob is (1 - p),
-        # and we drop (0,p) for np.random.rand() and keep (1-p,1) part.
-        # So if we scale the weights after training(before predicting), we should use (1-p)*weights.
-        # Or we can scale the output of dropout layer by 1/(1-p) when doing training,
-        # and use the normal weight when doing prediction.
+        '''
+        Drop prob is "p" so keep prob is (1 - p),
+        and we drop (0,p) for np.random.rand() and keep (1-p,1) part.
+        So if we scale the weights after training(before predicting), we should use (1-p)*weights.
+        Or we can scale the output of dropout layer by 1/(1-p) when doing training,
+        and use the normal weight when doing prediction.
+        '''
         mask = (np.random.rand(*x.shape) >= p) / (1 - p)
         out = x * mask
         #######################################################################
