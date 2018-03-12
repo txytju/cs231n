@@ -368,6 +368,7 @@ def dropout_forward(x, dropout_param):
         So if we scale the weights after training(before predicting), we should use (1-p)*weights.
         Or we can scale the output of dropout layer by 1/(1-p) when doing training,
         and use the normal weight when doing prediction.
+        This is called "inverted dropout"
         '''
         mask = (np.random.rand(*x.shape) >= p) / (1 - p)
         out = x * mask
