@@ -61,18 +61,6 @@ def affine_backward(dout, cache):
     dw = x_rsp.T.dot(dout)
     dx = dout.dot(w.T)
     dx = dx.reshape(*x.shape)
-
-
-    # 非向量式写法
-    # for i in range(N):
-    #     dout_row = dout[i, :].reshape(1, -1)
-    #     x_column = x_rsp[i, :].reshape(-1, 1)
-    #     dw += np.dot(x_column, dout_row)
-    # dx 的非向量式计算方法有误
-    # for i in range(N):
-    #     dout_column = dout[i, :].reshape(-1, 1)
-    #     dx[i,:,:] = np.dot(w, dout_column).reshape(x.shape[1],x.shape[2])
-
     db = np.sum(dout, axis=0)
     ###########################################################################
     #                             END OF YOUR CODE                            #
